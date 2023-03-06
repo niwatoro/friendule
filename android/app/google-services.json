@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "677291155845",
+    "project_id": "friendule",
+    "storage_bucket": "friendule.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677291155845:android:c328176934a1a8ddeae4ec",
+        "android_client_info": {
+          "package_name": "com.example.friendule"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677291155845-3j7bjijgmq0f0oejrqm5f27bopvujcet.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCURwSXg0M5Pj7LYS3awsUbtf0Q1D3a6IM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677291155845-1hneub096guc2fnqvpm7kb900u73743i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "677291155845-43ka6mis7q50dlp1658dl6ualt5kb1hn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.niwatoro.friendule"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
