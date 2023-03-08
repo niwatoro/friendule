@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class ProfilePhoto extends StatelessWidget {
   final String? photoUrl;
   final double size;
-
+  final double opacity;
   const ProfilePhoto({
     super.key,
     required this.photoUrl,
     this.size = 100,
+    this.opacity = 1,
   });
 
   @override
@@ -20,7 +21,7 @@ class ProfilePhoto extends StatelessWidget {
               backgroundColor: Colors.black,
               child: ClipOval(
                 child: Opacity(
-                  opacity: 0.7,
+                  opacity: opacity,
                   child: SizedBox.square(
                     dimension: size,
                     child: Image.network(

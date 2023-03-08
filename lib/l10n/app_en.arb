@@ -1,6 +1,8 @@
 {
   "apr": "April",
   "aug": "Augst",
+  "block": "Block",
+  "block_content": "Are you sure you want to block this user?",
   "cancel": "Cancel",
   "dec": "December",
   "delete": "Delete",
@@ -42,8 +44,11 @@
   "terms_of_service": "Terms of Service",
   "thu": "Thu",
   "tue": "Tue",
+  "unblock": "Unblock",
   "unfollow": "Unfollow",
   "unfollowed": "You unfollowed",
   "username": "Username",
-  "wed": "Wed"
+  "wed": "Wed",
+  "you_are_blocked": "You are blocked",
+  "you_blocked_this_user": "You blocked this user"
 }

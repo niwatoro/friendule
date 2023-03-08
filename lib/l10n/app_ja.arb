@@ -1,6 +1,8 @@
 {
   "apr": "4月",
   "aug": "8月",
+  "block": "ブロック",
+  "block_content": "このユーザーを本当にブロックしますか？",
   "cancel": "やめる",
   "dec": "12月",
   "delete": "削除",
@@ -42,8 +44,11 @@
   "terms_of_service": "利用規約",
   "thu": "木",
   "tue": "火",
+  "unblock": "ブロックを外す",
   "unfollow": "フォローを外す",
   "unfollowed": "フォローを外しました",
   "username": "ユーザーネーム",
-  "wed": "水"
+  "wed": "水",
+  "you_are_blocked": "あなたはブロックされています",
+  "you_blocked_this_user": "このユーザーをブロックしています"
 }

@@ -70,6 +70,7 @@ class _EditProfileState extends State<EditProfile> {
                               photoUrl: storagePath,
                               followers: _user!.followers,
                               followings: _user!.followings,
+                              blockUsers: _user!.blockUsers,
                               profile: _user!.profile,
                               token: _user!.token);
                         });
@@ -89,6 +90,7 @@ class _EditProfileState extends State<EditProfile> {
                               photoUrl: _user!.photoUrl,
                               followers: _user!.followers,
                               followings: _user!.followings,
+                              blockUsers: _user!.blockUsers,
                               profile: _user!.profile,
                               token: _user!.token);
                         });
@@ -107,6 +109,7 @@ class _EditProfileState extends State<EditProfile> {
                               photoUrl: _user!.photoUrl,
                               followers: _user!.followers,
                               followings: _user!.followings,
+                              blockUsers: _user!.blockUsers,
                               profile: _user!.profile,
                               token: _user!.token);
                         });
@@ -125,6 +128,7 @@ class _EditProfileState extends State<EditProfile> {
                               photoUrl: _user!.photoUrl,
                               followers: _user!.followers,
                               followings: _user!.followings,
+                              blockUsers: _user!.blockUsers,
                               profile: value,
                               token: _user!.token);
                         });
@@ -159,7 +163,10 @@ class PhotoUploader extends StatelessWidget {
       child: Stack(
         children: [
           Center(
-            child: ProfilePhoto(photoUrl: photoUrl),
+            child: ProfilePhoto(
+              photoUrl: photoUrl,
+              opacity: 0.7,
+            ),
           ),
           const Center(
             child: SizedBox.square(

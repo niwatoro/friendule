@@ -91,6 +91,7 @@ class FirestoreService {
           photoUrl: authUser.photoURL,
           followers: [],
           followings: [],
+          blockUsers: [],
           profile: "",
           token: ""));
     }
@@ -164,6 +165,38 @@ class FirestoreService {
     _usersCollectionRef
         .doc(AuthenticationService().getCurrentUserId())
         .update({"token": token});
+  }
+
+  Future<void> blockUser(String userId) async {
+    final myId = AuthenticationService().getCurrentUserId();
+    final user = await getUser(myId!);
+    final blockUsers = user!.blockUsers;
+    blockUsers.add(userId);
+    await updateUser(user);
+
+    removeFollowing(userId);
+  }
+
+  Future<void> unblockUser(String userId) async {
+    final myId = AuthenticationService().getCurrentUserId();
+    final user = await getUser(myId!);
+    final blockUsers = user!.blockUsers;
+    blockUsers.remove(userId);
+    await updateUser(user);
+  }
+
+  Stream<bool> checkIfIBlockStream(String userId) async* {
+    final myId = AuthenticationService().getCurrentUserId();
+    yield* _usersCollectionRef.doc(myId).snapshots().map(
+        (event) => User.fromMap(event.data()!).blockUsers.contains(userId));
+  }
+
+  Stream<bool> checkIfIBlockedStream(String userId) async* {
+    final myId = AuthenticationService().getCurrentUserId();
+    yield* _usersCollectionRef
+        .doc(userId)
+        .snapshots()
+        .map((event) => User.fromMap(event.data()!).blockUsers.contains(myId));
   }
 
   String getEventId(DateTime date) {

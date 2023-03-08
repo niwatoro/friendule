@@ -79,6 +79,33 @@ class _UserDetailPageState extends State<UserDetailPage> {
                             ),
                           );
                           break;
+                        case "block":
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(AppLocalizations.of(context)!.block),
+                              content: Text(
+                                  AppLocalizations.of(context)!.block_content),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                      AppLocalizations.of(context)!.cancel),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    _firestore.blockUser(_userId);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child:
+                                      Text(AppLocalizations.of(context)!.block),
+                                ),
+                              ],
+                            ),
+                          );
+                          break;
                         default:
                       }
                     },
@@ -103,141 +130,209 @@ class _UserDetailPageState extends State<UserDetailPage> {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      user.photoUrl == null
-                          ? const CircleAvatar(
-                              child: Text("No Data"),
-                            )
-                          : CircleAvatar(
-                              backgroundImage: NetworkImage(user.photoUrl!),
-                            ),
-                      const SizedBox(width: 16.0),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      DropdownMenuItem(
+                        value: "block",
+                        child: Row(
                           children: [
-                            Text(
-                              user.name,
-                              style: Theme.of(context).textTheme.titleLarge,
+                            const Icon(
+                              Icons.block,
+                              color: Colors.red,
                             ),
-                            Text(
-                              "@${user.username}",
-                              style: const TextStyle(color: Colors.grey),
-                            ),
+                            const SizedBox(width: 4),
+                            Text(AppLocalizations.of(context)!.block),
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      user.profile.isEmpty
-                          ? const Text("(bio not set)",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontStyle: FontStyle.italic))
-                          : Text(user.profile),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Row(
-                            children: [
-                              Text(user.followers.length.toString()),
-                              const SizedBox(width: 4),
-                              Text(
-                                AppLocalizations.of(context)!.followers,
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 16.0),
-                          Row(
-                            children: [
-                              Text(user.followings.length.toString()),
-                              const SizedBox(width: 4),
-                              Text(
-                                AppLocalizations.of(context)!.followings,
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _isMyProfile
-                      ? FullWidthButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const EditProfile()));
-                          },
-                          label: AppLocalizations.of(context)!.edit_profile,
-                        )
-                      : StreamBuilder<bool>(
-                          stream: FirestoreService()
-                              .checkIfIFollowStream(user.userId),
-                          builder: (context, snapshot) {
-                            final bool isFollowing = snapshot.data ?? false;
-                            if (isFollowing) {
-                              return FullWidthButton(
-                                  onPressed: () async {
-                                    _firestore.removeFollowing(user.userId);
-                                    if (!mounted) return;
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                AppLocalizations.of(context)!
-                                                    .unfollowed)));
-                                  },
-                                  label:
-                                      AppLocalizations.of(context)!.unfollow);
-                            }
-                            return FullWidthButton(
-                                onPressed: () async {
-                                  _firestore.addFollowing(user.userId);
-                                  if (!mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              AppLocalizations.of(context)!
-                                                  .followed)));
-                                },
-                                label: AppLocalizations.of(context)!.follow);
-                          },
-                        ),
-                ),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border(
-                      top: BorderSide(color: Theme.of(context).shadowColor),
-                    )),
-                    child: _isMyProfile
-                        ? const MySchedule()
-                        : UserSchedule(userId: user.userId),
-                  ),
-                ),
               ],
             ),
+            body: StreamBuilder<bool>(
+                stream: _firestore.checkIfIBlockStream(_userId),
+                builder: (context, snapshot) {
+                  final isBlocked = snapshot.data ?? true;
+                  return StreamBuilder<bool>(
+                      stream: _firestore.checkIfIBlockedStream(_userId),
+                      builder: (context, snapshot) {
+                        final amBlocked = snapshot.data ?? true;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  user.photoUrl == null
+                                      ? const CircleAvatar(
+                                          child: Text("No Data"),
+                                        )
+                                      : CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(user.photoUrl!),
+                                        ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          user.name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge,
+                                        ),
+                                        Text(
+                                          "@${user.username}",
+                                          style: const TextStyle(
+                                              color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  user.profile.isEmpty
+                                      ? const Text("(bio not set)",
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontStyle: FontStyle.italic))
+                                      : Text(user.profile),
+                                  const SizedBox(height: 16),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                              user.followers.length.toString()),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            AppLocalizations.of(context)!
+                                                .followers,
+                                            style: const TextStyle(
+                                                color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(width: 16.0),
+                                      Row(
+                                        children: [
+                                          Text(user.followings.length
+                                              .toString()),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            AppLocalizations.of(context)!
+                                                .followings,
+                                            style: const TextStyle(
+                                                color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: _isMyProfile
+                                  ? FullWidthButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const EditProfile()));
+                                      },
+                                      label: AppLocalizations.of(context)!
+                                          .edit_profile,
+                                    )
+                                  : isBlocked
+                                      ? FullWidthButton(
+                                          label: AppLocalizations.of(context)!
+                                              .unblock,
+                                          onPressed: () {
+                                            _firestore.unblockUser(_userId);
+                                          })
+                                      : StreamBuilder<bool>(
+                                          stream: FirestoreService()
+                                              .checkIfIFollowStream(
+                                                  user.userId),
+                                          builder: (context, snapshot) {
+                                            final bool isFollowing =
+                                                snapshot.data ?? false;
+                                            if (isFollowing) {
+                                              return FullWidthButton(
+                                                  onPressed: () async {
+                                                    _firestore.removeFollowing(
+                                                        user.userId);
+                                                    if (!mounted) return;
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                AppLocalizations.of(
+                                                                        context)!
+                                                                    .unfollowed)));
+                                                  },
+                                                  label: AppLocalizations.of(
+                                                          context)!
+                                                      .unfollow);
+                                            }
+                                            return FullWidthButton(
+                                                onPressed: () async {
+                                                  _firestore.addFollowing(
+                                                      user.userId);
+                                                  if (!mounted) return;
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              AppLocalizations.of(
+                                                                      context)!
+                                                                  .followed)));
+                                                },
+                                                label: AppLocalizations.of(
+                                                        context)!
+                                                    .follow);
+                                          },
+                                        ),
+                            ),
+                            Expanded(
+                                child: !amBlocked
+                                    ? !isBlocked
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                              top: BorderSide(
+                                                  color: Theme.of(context)
+                                                      .shadowColor),
+                                            )),
+                                            child: _isMyProfile
+                                                ? const MySchedule()
+                                                : UserSchedule(
+                                                    userId: user.userId),
+                                          )
+                                        : Center(
+                                            child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .you_blocked_this_user))
+                                    : Center(
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .you_are_blocked),
+                                      )),
+                          ],
+                        );
+                      });
+                }),
           );
         });
   }

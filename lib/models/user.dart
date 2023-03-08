@@ -5,6 +5,7 @@ class User {
   final String? photoUrl;
   final List<String> followers;
   final List<String> followings;
+  final List<String> blockUsers;
   final String profile;
   final String token;
 
@@ -15,6 +16,7 @@ class User {
     required this.photoUrl,
     required this.followers,
     required this.followings,
+    required this.blockUsers,
     required this.profile,
     required this.token,
   });
@@ -27,6 +29,7 @@ class User {
       photoUrl: map["photoUrl"],
       followers: List<String>.from(map["followers"]),
       followings: List<String>.from(map["followings"]),
+      blockUsers: List<String>.from(map["blockUsers"]),
       profile: map["profile"],
       token: map["token"],
     );
@@ -40,6 +43,7 @@ class User {
       "photoUrl": photoUrl,
       "followers": followers,
       "followings": followings,
+      "blockUsers": blockUsers,
       "profile": profile,
       "token": token,
     };
