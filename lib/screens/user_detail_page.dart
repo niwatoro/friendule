@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:friendule/screens/edit_profile.dart';
 import 'package:friendule/screens/my_schedule.dart';
 import 'package:friendule/services/firestore.dart';
 import 'package:friendule/widgets/user_schedule.dart';
@@ -185,7 +186,10 @@ class _UserDetailPageState extends State<UserDetailPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: _isMyProfile
                       ? FullWidthButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const EditProfile()));
+                          },
                           label: AppLocalizations.of(context)!.edit_profile,
                         )
                       : StreamBuilder<bool>(

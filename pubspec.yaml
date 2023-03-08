@@ -47,6 +47,9 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   syncfusion_flutter_calendar: ^20.4.51
   uuid: ^3.0.7
+  image_picker: ^0.8.6+4
+  firebase_storage: ^11.0.15
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:

@@ -1,21 +1,25 @@
+import "dart:io";
+
 import "package:cloud_firestore/cloud_firestore.dart";
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import "package:friendule/models/user.dart";
-import "package:friendule/services/authentication.dart";
 import "package:intl/intl.dart";
 
 import "../models/event.dart";
 import "../models/notification.dart" as model;
 import "../models/signal.dart";
+import "../models/user.dart";
+import "../services/authentication.dart";
 
 class FirestoreService {
   final _usersCollectionRef = FirebaseFirestore.instance.collection("users");
   final _eventsCollectionRef = FirebaseFirestore.instance.collection("events");
   final _notificationsCollectionRef =
       FirebaseFirestore.instance.collection("notifications");
+  final _storageRef = FirebaseStorage.instance.ref();
 
   Future<void> addUser(User user) async {
     try {
@@ -352,5 +356,19 @@ class FirestoreService {
       debugPrint("getNotificationsStream Error: $e");
       yield [];
     }
+  }
+
+  Future<String?> uploadPhoto(String path) async {
+    try {
+      final file = File(path);
+      final fileRef = _storageRef.child("images/${file.path.split("/").last}");
+      final uploadTask = fileRef.putFile(file);
+      final snapshot = await uploadTask;
+      final url = await snapshot.ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      debugPrint("uploadPhoto Error: $e");
+    }
+    return null;
   }
 }

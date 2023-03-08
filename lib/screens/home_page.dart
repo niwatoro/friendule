@@ -5,6 +5,7 @@ import 'package:friendule/screens/my_schedule.dart';
 import 'package:friendule/screens/settings.dart';
 import 'package:friendule/services/authentication.dart';
 import 'package:friendule/services/firestore.dart';
+import 'package:friendule/widgets/profile_photo.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../models/user.dart';
@@ -81,14 +82,10 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(fontSize: 20),
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              user.photoUrl == null
-                                  ? const Center(
-                                      child: Text("No Data"),
-                                    )
-                                  : Image.network(
-                                      user.photoUrl!,
-                                      fit: BoxFit.fitHeight,
-                                    ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ProfilePhoto(photoUrl: user.photoUrl),
                             ],
                           ),
                   ),
